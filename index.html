@@ -41,8 +41,16 @@
                     });
 
                     if (response.ok) {
-                        status.textContent = "File uploaded successfully!";
-                    } else {
+    status.textContent = "File uploaded successfully!";
+    setTimeout(() => {
+        try {
+            window.close(); // Try closing first
+        } catch (e) {
+            window.location.href = "/"; // Fallback to redirect
+        }
+    }, 1000);
+}
+ else {
                         status.textContent = "Upload failed.";
                     }
                 } catch (error) {
