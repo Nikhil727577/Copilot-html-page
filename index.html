@@ -10,8 +10,12 @@
 
     <p id="status"></p>
 
-    <!-- Move script tag to the end -->
     <script>
+        // Extract userName from query string
+        const queryParams = new URLSearchParams(window.location.search);
+        const userName = queryParams.get('userName') || "unknown";
+        console.log("User Detected:", userName);
+
         async function uploadFile() {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
@@ -28,7 +32,8 @@
 
                 const body = {
                     fileName: file.name,
-                    fileContent: base64Data
+                    fileContent: base64Data,
+                    userName: userName  // 👈 Added userName here
                 };
 
                 try {
@@ -41,16 +46,15 @@
                     });
 
                     if (response.ok) {
-    status.textContent = "File uploaded successfully!";
-    setTimeout(() => {
-        try {
-            window.close(); // Try closing first
-        } catch (e) {
-            window.location.href = "/"; // Fallback to redirect
-        }
-    }, 1000);
-}
- else {
+                        status.textContent = "File uploaded successfully!";
+                        setTimeout(() => {
+                            try {
+                                window.close();
+                            } catch (e) {
+                                window.location.href = "/";
+                            }
+                        }, 1000);
+                    } else {
                         status.textContent = "Upload failed.";
                     }
                 } catch (error) {
@@ -58,9 +62,9 @@
                     status.textContent = "Error uploading file.";
                 }
             };
+
             reader.readAsDataURL(file);
         }
     </script>
 </body>
 </html>
-
